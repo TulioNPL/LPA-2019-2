@@ -50,7 +50,7 @@ int main(){
         for(int i = 0; i < N; i++){
             cout << right << setw(maiorString) << linhas[i] << endl;
         }
-        cout << endl;
         cin >> N;
+        if(N != 0) cout << endl;
     }
 }
