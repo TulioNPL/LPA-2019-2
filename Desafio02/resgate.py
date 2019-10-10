@@ -1,14 +1,60 @@
 class Grafo:
     def __init__(self, vertices):
         self.nVer = vertices
-        self.grafo = {i: [] for i in range(n)}
+        self.grafo = []
 
     def addAresta(self,u,v,peso):
         """Adiciona uma aresta no grafo"""
         self.grafo.append([u,v,peso])
-    def kruskal():
-        """Acha a árvore geradora mínima"""
 
+    def findSet(self, pai, i):
+        """Acha o set do vertice i"""
+        if pai[i] == i:
+            return i
+        return self.findSet(pai,pai[i])
+
+    def union(self, a, b, nivel, pai):
+        """Une dois subgrafos"""
+
+        raizA = self.findSet(pai,a)
+        raizB = self.findSet(pai,b)
+
+        if nivel[raizA] < nivel[raizB]:
+            pai[raizA] = raizB
+        elif nivel[raizA] > nivel[raizB]:
+            pai[raizB] = raizA
+        else:
+            pai[raizB] = raizA
+            nivel[raizA] += 1
+
+    def kruskal(self):
+        """Encontra a soma das arestas da AGM"""
+        AGM = []
+        i = j = 0
+        
+        self.grafo = sorted(self.grafo,key=lambda item:item[2])
+
+        pai = []
+        nivel = []
+
+        for vertice in range(self.nVer):
+            pai.append(vertice)
+            nivel.append(0)
+
+        while j < self.nVer-1:
+            u,v,w = self.grafo[i]
+            i+=1
+            a = self.findSet(pai,u)
+            b = self.findSet(pai,v)
+
+            if a!=b:
+                j+=1
+                AGM.append([u,v,w])
+                self.union(a,b,nivel,pai)
+        resp = 0
+        for u,v,w in AGM:
+            resp += w
+        print('%.2f' % (resp/100))
 
 def calcDist(a,b):
     x1 = a[0]
@@ -38,11 +84,6 @@ while c > 0:
                 dist = calcDist(coord[i],coord[j])
                 g.addAresta(i,j,dist)
 
-    #Calcular as distâncias e usá-las com peso na árvore
-
-    #Usar kruskal para achar a árvore geradora mínima
-
-    #Somar os valores das arestas da AGM e printar com precisao de 2 casas decimais
-    
+    g.kruskal()
     c-=1
 
