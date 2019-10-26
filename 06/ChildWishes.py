@@ -1,49 +1,62 @@
-class Grafo():
-    def __init__(self,vertices):
-        self.numV = vertices
-        self.grafo=[[0 for coluna in range(vertices)] for linha in range (vertices)]
-    
-    def taSafe(self, v, cor, c):
-        """Retorna se é seguro colocar a cor C no vértice V"""
-        for i in range(self.numV):
-            if self.grafo[v][i] == 1 and cor[i] == c:
-                return False
-        return True
+from collections import defaultdict 
+  
+class Grafo(): 
+    def __init__(self,vertices): 
+        self.grafo = defaultdict(list) 
+        self.V = vertices 
+  
+    def addEdge(self,u,v): 
+        self.grafo[u].append(v) 
+  
+    def temCicloUtil(self, v, visitado, pilha): 
 
-    def coloracaoUtil(self,corMax,cor,v):
-        """Função recursiva, retorna se é possivel colorir um grafo com no maximo corMax cores"""
-        if v == self.numV:
-            return True
+        visitado[v] = True
+        pilha[v] = True
 
-        for c in range(1,corMax+1):
-            if self.taSafe(v,cor,c) == True:
-                cor[v] = c
-                if self.coloracaoUtil(corMax,cor,v+1) == True:
+        for vizinho in self.grafo[v]: 
+            if visitado[vizinho] == False: 
+                if self.temCicloUtil(vizinho, visitado, pilha) == True: 
                     return True
-                cor[v] = 0
+            elif pilha[vizinho] == True: 
+                return True
 
-    def coloracao(self,corMax):
-        cor = [0] * self.numV
-        print(cor)
-        if self.coloracaoUtil(corMax,cor,0) == None:
-            #print("N")
-            return False
-        #print("Y")
-        print(cor[0])
-        return True
+        pilha[v] = False
+        return False
+  
+    def temCiclo(self): 
+        visitado = [False] * self.V 
+        pilha = [False] * self.V 
+        for no in range(self.V): 
+            if visitado[no] == False: 
+                if self.temCicloUtil(no,visitado,pilha) == True: 
+                    return True
+        return False
 
+#main
 K,W = map(int, input().split())
-
 while (K+W) != 0:
-    if W > 2:
+    if W != 0:
         g = Grafo(K)
+
         for i in range(0,W):
             A,B = map(int, input().split())
-            g.grafo[A-1][B-1] = 1
-            g.grafo[B-1][A-1] = 1
+            A-=1
+            B-=1
+            g.addEdge(A,B)
+            g.addEdge(B,A)
 
-        #print(g.grafo)
-        g.coloracao(2)
+        #Se tiver ciclo no grafo, nao eh possivel realizar o desejo das criancas
+        if g.temCiclo() == True:
+            #Caso o numero de criancas seja menor que quatro ou
+            #O numero de desejos seja menor que dois
+            #Certamente sera sempre possivel realizar os desejos das criancas
+            if W > 2 and K > 3:
+                print("N")
+            else:
+                print("Y")
+        else:
+            print("Y")
     else:
         print("Y")
     K,W = map(int, input().split())
+    
