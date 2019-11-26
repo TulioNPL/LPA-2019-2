@@ -16,7 +16,7 @@ int moedas(int N, int M, int comp[]) {
     dp[0] = 0;
     for(int i = 1; i <= M; i++) { 
         for(int j = 1; j<= N; j++) {
-            if(0 <= i - comp[j]){ //Se i - comprimento de J >= 0
+            if(0 <= i - comp[j]){ //Se i - comprimento de J >= 0, logo cabe um item J
                 dp[i] = min(dp[i], dp[i-comp[j]] + 1);  //dp[i] assume o menor valor entre o obtido atualmente e entre dp[i-comp[j]]+1
             }
         }
