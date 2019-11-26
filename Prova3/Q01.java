@@ -26,14 +26,12 @@ class Q01 {
 	public static void kadane(int [] lucros, int n) {
 		int maxAtual = 0;
 		int maxTotal = -1;
-		int temp = 0;
 		
 		for(int i = 0; i < n; i++) {
 			maxAtual += lucros[i];
 			
 			if(maxAtual < 0) {
 				maxAtual = 0;
-				temp = i+1;
 			}
 			
 			if(maxAtual > maxTotal) {
