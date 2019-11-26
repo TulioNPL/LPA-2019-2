@@ -41,10 +41,9 @@ int knapSack(int W, int wt[], int val[], int n) {
 					best[i][w] = i;
 				} else {
 					K[i][w] = K[i-1][w];
-					//best[i][w] = best[i-1][w];
 				} 
-				else
-					K[i][w] = K[i-1][w]; 
+			else
+				K[i][w] = K[i-1][w]; 
 		} 
 	} 
 
